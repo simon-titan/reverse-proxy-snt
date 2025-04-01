@@ -1,9 +1,6 @@
 {
     "rewrites": [
-        {
-            "source": "/",
-            "destination": "https://snt-starter.webflow.io"
-          },
+     
       {
         "source": "/api/:path*",
         "destination": "/api/:path*"
