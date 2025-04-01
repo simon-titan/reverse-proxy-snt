@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
 
 export async function middleware(req) {
-  const { pathname } = req.nextUrl;
+  const { pathname, origin } = req.nextUrl;
 
-  // Wenn User zur Login-Seite geht, nicht umleiten
+  // Debug: Console-Log für aktuelle URL (geht nur lokal)
+  console.log(`Middleware läuft für: ${origin}${pathname}`);
+
+  // Login darf immer erreichbar sein
   if (pathname === "/login") {
     return NextResponse.next();
   }
 
-  const authResponse = await fetch(`${req.nextUrl.origin}/api/auth`);
+  // API-Aufruf für Authentifizierung
+  const authResponse = await fetch(`${origin}/api/auth`);
   const authData = await authResponse.json();
 
   if (!authResponse.ok || !authData.items) {
@@ -18,6 +22,7 @@ export async function middleware(req) {
   return NextResponse.next();
 }
 
+// Middleware soll für Dashboard & Root-URL greifen
 export const config = {
-  matcher: ["/dashboard", "/"], // Middleware nur auf diesen Seiten aktiv
+  matcher: ["/dashboard", "/"],
 };
