@@ -4,7 +4,7 @@ export async function middleware(req) {
   const protectedRoutes = ["/dashboard", "/profile"];
   const { pathname } = req.nextUrl;
 
-  // Nur auf geschützte Seiten reagieren
+  // Hauptseite & andere öffentliche Seiten direkt durchlassen
   if (!protectedRoutes.includes(pathname)) {
     return NextResponse.next();
   }
@@ -20,6 +20,7 @@ export async function middleware(req) {
   return NextResponse.next();
 }
 
+// Middleware greift nur für spezifische Routen
 export const config = {
-  matcher: ["/dashboard", "/profile"], // Nur diese Routen erfordern Login
+  matcher: ["/dashboard", "/profile"], 
 };

@@ -18,7 +18,7 @@
       },
       {
         "source": "/:path*",
-        "destination": "https://deine-webflow-domain.com/:path*"
+        "destination": "https://snt-starter.webflow.io/:path*"
       }
     ]
   }
