@@ -1,0 +1,25 @@
+{
+    "rewrites": [
+        {
+            "source": "*",
+            "destination": "https://snt-starter.webflow.io"
+          },
+      {
+        "source": "/api/:path*",
+        "destination": "/api/:path*"
+      },
+      {
+        "source": "/dashboard",
+        "destination": "https://deine-webflow-domain.com/dashboard"
+      },
+      {
+        "source": "/profile",
+        "destination": "https://deine-webflow-domain.com/profile"
+      },
+      {
+        "source": "/:path*",
+        "destination": "https://deine-webflow-domain.com/:path*"
+      }
+    ]
+  }
+  

@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
 
 export async function middleware(req) {
-  const { pathname, origin } = req.nextUrl;
+  const protectedRoutes = ["/dashboard", "/profile"];
+  const { pathname } = req.nextUrl;
 
-  // Debug: Console-Log für aktuelle URL (geht nur lokal)
-  console.log(`Middleware läuft für: ${origin}${pathname}`);
-
-  // Login darf immer erreichbar sein
-  if (pathname === "/login") {
+  // Nur auf geschützte Seiten reagieren
+  if (!protectedRoutes.includes(pathname)) {
     return NextResponse.next();
   }
 
-  // API-Aufruf für Authentifizierung
-  const authResponse = await fetch(`${origin}/api/auth`);
+  // API-Check für Authentifizierung
+  const authResponse = await fetch(`${req.nextUrl.origin}/api/auth`);
   const authData = await authResponse.json();
 
   if (!authResponse.ok || !authData.items) {
@@ -22,7 +20,6 @@ export async function middleware(req) {
   return NextResponse.next();
 }
 
-// Middleware soll für Dashboard & Root-URL greifen
 export const config = {
-  matcher: ["/dashboard", "/"],
+  matcher: ["/dashboard", "/profile"], // Nur diese Routen erfordern Login
 };
