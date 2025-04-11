@@ -3,30 +3,38 @@ export default function Page() {
 }
 
 export async function getServerSideProps({ req, res }) {
-  // 1. Passwort direkt hier (kein .env nötig)
+  // 1. Authentifizierung
   const auth = 'Basic ' + Buffer.from(':Nuhadt123').toString('base64')
   
-  // 2. Original-URL wiederherstellen
+  // 2. Pfad extrahieren
   const path = req.url || '/'
   
-  // 3. Webflow abfragen
-  const response = await fetch(`https://snt-starter.webflow.io${path}`, {
-    headers: {
-      'Authorization': auth,
-      'Host': 'snt-starter.webflow.io',
-      'User-Agent': 'snttrades-proxy'
+  // 3. Webflow abfragen MIT ERROR-HANDLING
+  try {
+    const response = await fetch(`https://snt-starter.webflow.io${path}`, {
+      headers: {
+        'Authorization': auth,
+        'Host': 'snt-starter.webflow.io'
+      }
+    })
+
+    // 4. Statuscode prüfen
+    if (!response.ok) {
+      res.statusCode = response.status
+      return { props: {} }
     }
-  })
 
-  // 4. Antwort direkt durchreichen
-  if (!response.ok) {
-    res.statusCode = 404
-    return { props: {} }
+    // 5. HTML direkt zurückschicken
+    const html = await response.text()
+    res.setHeader('Content-Type', 'text/html')
+    res.write(html)
+    res.end()
+
+  } catch (error) {
+    console.error('Proxy error:', error)
+    res.statusCode = 500
+    res.end('Proxy error')
   }
-
-  const html = await response.text()
-  res.write(html)
-  res.end()
 
   return { props: {} }
 }
