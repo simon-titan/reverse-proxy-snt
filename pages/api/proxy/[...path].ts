@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const pathSegments = Array.isArray(req.query.path) 
   ? req.query.path 
   : [req.query.path || '']; // Fallback für string/undefined
-const path = pathSegments.join('');
+const path = pathSegments.join('/');
 
 
   try {
