@@ -25,7 +25,7 @@ const path = pathSegments.join('/');
 
     // 4. Webflow.io-Links in der Antwort ersetzen (Sicherheit/SEO)
     let html = await response.text();
-    html = html.replace(/snt-starter\.design\.webflow\.io/g, "snttrades.de");
+    html = html.replace(/snt-starter\.webflow\.io/g, "snttrades.de");
 
     // 5. Antwort an Client senden
     res.status(response.status).send(html);
