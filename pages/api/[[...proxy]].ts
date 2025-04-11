@@ -1,38 +1,57 @@
-// pages/api/proxy.ts
+// pages/api/[[...proxy]].ts
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import httpProxy from 'http-proxy'
 import fetch from 'node-fetch'
+import * as cheerio from 'cheerio'
 
 const proxy = httpProxy.createProxyServer()
-let cachedCookie = '' // in-memory cache
 
 const WEBFLOW_URL = 'https://snt-starter.webflow.io'
-const WEBFLOW_PASSWORD = 'Nuhadt123'
+const PASSWORD = 'Nuhadt123'
 
-// Login-Funktion: holt den Session-Cookie von Webflow
-async function fetchWebflowCookie(): Promise<string> {
-  const res = await fetch(`${WEBFLOW_URL}/`, {
+let cachedCookie = ''
+
+async function getWebflowSession(): Promise<string> {
+  // Schritt 1: Hole die Login-Seite (um das versteckte Feld zu bekommen)
+  const res = await fetch(WEBFLOW_URL, {
+    method: 'GET',
+  })
+
+  const html = await res.text()
+  const cookieHeader = res.headers.get('set-cookie') || ''
+  const $ = cheerio.load(html)
+
+  // Meistens hat Webflow ein verstecktes Feld namens 'password'
+  const formAction = $('form').attr('action') || '/'
+  const hiddenInput = $('input[type="hidden"]').attr('name') || ''
+
+  // Schritt 2: POST mit Passwort und ggf. verstecktem Feld
+  const loginRes = await fetch(`${WEBFLOW_URL}${formAction}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
+      'Cookie': cookieHeader,
     },
-    body: new URLSearchParams({ password: WEBFLOW_PASSWORD }),
+    body: new URLSearchParams({
+      password: PASSWORD,
+      [hiddenInput]: '', // leer, Webflow braucht das evtl.
+    }),
     redirect: 'manual',
   })
 
-  const setCookie = res.headers.get('set-cookie')
-  if (!setCookie) throw new Error('Webflow login failed (no cookie)')
+  const finalCookie = loginRes.headers.get('set-cookie')?.split(';')[0]
 
-  const sessionCookie = setCookie.split(';')[0]
-  return sessionCookie
+  if (!finalCookie) throw new Error('❌ Webflow Login fehlgeschlagen')
+
+  return finalCookie
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (!cachedCookie) {
-      console.log('🔑 Logging in to Webflow...')
-      cachedCookie = await fetchWebflowCookie()
+      console.log('🔓 Logging into Webflow...')
+      cachedCookie = await getWebflowSession()
     }
 
     req.headers.cookie = cachedCookie
@@ -44,12 +63,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     proxy.on('error', (err) => {
-      console.error('Proxy error:', err)
-      res.statusCode = 500
-      res.end('Proxy error.')
+      console.error('❌ Proxy Error:', err)
+      res.status(500).send('Proxy Error')
     })
   } catch (err: any) {
-    console.error('Login or proxy failed:', err)
+    console.error('❌ Fehler im Proxy-Handler:', err)
     res.status(500).send('Internal Server Error')
   }
 }
