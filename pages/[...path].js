@@ -3,38 +3,15 @@ export default function Page() {
 }
 
 export async function getServerSideProps({ req, res }) {
-  // 1. Authentifizierung
-  const auth = 'Basic ' + Buffer.from(':Nuhadt123').toString('base64')
+  // 1. Permanent Redirect zu Webflow MIT Passwort
+  const url = new URL(req.url, 'https://snt-starter.webflow.io')
+  url.searchParams.append('auth', 'Nuhadt123')
   
-  // 2. Pfad extrahieren
-  const path = req.url || '/'
-  
-  // 3. Webflow abfragen MIT ERROR-HANDLING
-  try {
-    const response = await fetch(`https://snt-starter.webflow.io${path}`, {
-      headers: {
-        'Authorization': auth,
-        'Host': 'snt-starter.webflow.io'
-      }
-    })
-
-    // 4. Statuscode prüfen
-    if (!response.ok) {
-      res.statusCode = response.status
-      return { props: {} }
-    }
-
-    // 5. HTML direkt zurückschicken
-    const html = await response.text()
-    res.setHeader('Content-Type', 'text/html')
-    res.write(html)
-    res.end()
-
-  } catch (error) {
-    console.error('Proxy error:', error)
-    res.statusCode = 500
-    res.end('Proxy error')
-  }
+  res.writeHead(302, {
+    Location: url.toString(),
+    'Set-Cookie': `webflow_auth=Nuhadt123; Path=/`
+  })
+  res.end()
 
   return { props: {} }
 }
