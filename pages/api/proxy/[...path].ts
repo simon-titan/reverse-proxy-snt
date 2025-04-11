@@ -19,13 +19,19 @@ const path = pathSegments.join('/');
     const response = await fetch(`${WEBFLOW_URL}/${path}`, {
       headers: {
         Authorization: `Basic ${Buffer.from(`:${WEBFLOW_PASSWORD}`).toString('base64')}`,
-        Host: "snt-starter.webflow.io", // Wichtig für CORS
+        Host: "snt-starter.webflow.io",
+        Origin: "https://snttrades.de" // Wichtig für CORS
       },
     });
 
+    console.log("Webflow response status:", response.status); // Debug-Log
+
+
     // 4. Webflow.io-Links in der Antwort ersetzen (Sicherheit/SEO)
     let html = await response.text();
-    html = html.replace(/snt-starter\.webflow\.io/g, "snttrades.de");
+    //html = html.replace(/snt-starter\.webflow\.io/g, "snttrades.de");
+
+    
 
     // 5. Antwort an Client senden
     res.status(response.status).send(html);
