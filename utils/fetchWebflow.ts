@@ -1,6 +1,6 @@
 // utils/fetchWebflow.ts
 
-export const WEBFLOW_SITE = 'https://snt-starter-webflow.io'
+export const WEBFLOW_SITE = 'https://snt-starter.webflow.io'
 export const PASSWORD = 'Nuhadt123'
 
 export async function loginToWebflow(): Promise<string | null> {
