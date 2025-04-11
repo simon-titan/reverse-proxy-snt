@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    },
-    {
-      "source": "/:path*",  
-      "destination": "https://snt-starter.webflow.io/:path*"
+      "source": "/:path*",
+      "destination": "https://snt-starter.webflow.io/"
     }
   ],
   "headers": [
@@ -15,12 +11,12 @@
       "headers": [
         {
           "key": "Host",
-          "value": "snt-starter.webflow.io"  
+          "value": "snt-starter.webflow.io"
         },
         {
           "key": "Authorization",
-          "value": "Basic $(echo -n ':Nuhadt123' | base64)"  }
-          
+          "value": "Basic $(echo -n ':Nuhadt123' | base64)"
+        }
       ]
     }
   ]
