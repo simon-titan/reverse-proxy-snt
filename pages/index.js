@@ -10,8 +10,9 @@ export default function Home({ htmlContent }) {
   
     const response = await fetch(WEBFLOW_URL, {
       headers: {
-        Authorization: `Basic ${Buffer.from(`:${WEBFLOW_PASSWORD}`).toString("base64")}`,
+        Authorization: `Basic ${Buffer.from(`:${WEBFLOW_PASSWORD}`).toString('base64')}`,
         Host: "snt-starter.webflow.io",
+        Origin: "https://snttrades.de" // Wichtig für CORS
       },
     });
   
