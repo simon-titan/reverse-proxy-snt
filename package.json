@@ -12,6 +12,8 @@
     "react-dom": "latest"
   },
   "devDependencies": {
-    "@types/http-proxy": "^1.17.16"
+    "@types/http-proxy": "^1.17.16",
+    "@types/react": "19.1.1",
+    "typescript": "5.8.3"
   }
 }

@@ -14,7 +14,7 @@ const proxy = httpProxy.createProxyServer({ changeOrigin: true })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const cookieName = 'wf_loggedin'
-  const cookies = req.headers.cookie || ''
+  const cookies = req.headers?.cookie || ''
   const alreadyLoggedIn = cookies.includes(cookieName)
 
   if (!alreadyLoggedIn) {
