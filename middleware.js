@@ -1,32 +1,14 @@
-import { NextResponse } from 'next/server';
-
-console.log("Hello World");
+// middleware.js
+import { NextResponse } from "next/server";
 
 export async function middleware(req) {
   const { pathname } = req.nextUrl;
 
-  // 1. Öffentliche Routen (Landing Page, Produktübersicht)
-  const publicRoutes = ["/", "/products"];
-  if (publicRoutes.includes(pathname)) {
-    // Rewrite durch PROXY (nicht direkt zu Webflow!)
-    const proxyPath = pathname === '/' ? '' : pathname;
-    return NextResponse.rewrite(new URL(`/api/proxy${proxyPath}`, req.url));
-  }
-
-  console.log("Middleware rewrite:", `/api/proxy${pathname}`);
-
-  // 2. Geschützte Routen (später mit Outseta)
-  const protectedRoutes = ["/platform", "/profile"];
-  if (protectedRoutes.includes(pathname)) {
+  // Nur für /platform/* prüfen
+  if (pathname.startsWith("/platform")) {
     const authResponse = await fetch(`${req.nextUrl.origin}/api/auth`);
-    if (!authResponse.ok) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
+    if (!authResponse.ok) return NextResponse.redirect("/login");
   }
 
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: ['/', '/products', '/dashboard', '/profile'],
-};
