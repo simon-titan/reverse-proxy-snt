@@ -16,7 +16,7 @@ const path = pathSegments.join('/');
 
   try {
     // 3. Anfrage an Webflow mit Passwort-Header
-    const response = await fetch(`${WEBFLOW_URL}${path}`, {
+    const response = await fetch(`${WEBFLOW_URL}`, {
       headers: {
         Authorization: `Basic ${Buffer.from(`:${WEBFLOW_PASSWORD}`).toString('base64')}`,
         Host: "snt-starter.webflow.io",
