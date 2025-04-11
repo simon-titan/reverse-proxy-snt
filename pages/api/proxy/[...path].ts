@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // 1. Webflow-Ziel-URL & Passwort (aus Umgebungsvariablen)
   const WEBFLOW_URL = 'https://snt-starter.webflow.io';
-  const WEBFLOW_PASSWORD = process.env.WEBFLOW_PASSWORD; // Aus Vercel-Env
+  const WEBFLOW_PASSWORD = 'Nuhadt123' // Aus Vercel-Env
 
   // 2. Pfad aus der Anfrage extrahieren (z. B. `/api/proxy/products` → `products`)
   const pathSegments = Array.isArray(req.query.path) 
