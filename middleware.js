@@ -1,14 +1,16 @@
 import { NextResponse } from 'next/server'
 
 export async function middleware(request) {
-  const url = request.nextUrl.clone()
+  const response = NextResponse.next()
   
-  // Nur für /platform/... Auth prüfen
-  if (url.pathname.startsWith('/platform')) {
-    const auth = await fetch(`${url.origin}/api/auth`)
-    if (!auth.ok) url.pathname = '/login'
-  }
+  // Für alle Requests den Auth-Header setzen
+  response.headers.set(
+    'Authorization', 
+    `Basic ${Buffer.from(':Nuhadt123').toString('base64')}`
+  )
   
-  // Alle anderen Requests zu Webflow
-  return NextResponse.rewrite(`https://snt-starter.webflow.io${url.pathname}`)
+  response.headers.set('Host', 'snt-starter.webflow.io')
+  response.headers.set('Cache-Control', 'no-store')
+
+  return response
 }
