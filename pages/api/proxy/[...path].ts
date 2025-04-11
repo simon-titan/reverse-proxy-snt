@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const pathSegments = Array.isArray(req.query.path) 
   ? req.query.path 
   : [req.query.path || '']; // Fallback für string/undefined
-const path = pathSegments.join('/');
+const path = pathSegments.join('');
 
 
   try {
@@ -22,6 +22,7 @@ const path = pathSegments.join('/');
         Host: "snt-starter.webflow.io",
         Origin: "https://snttrades.de" // Wichtig für CORS
       },
+      
     });
 
     console.log("Webflow response status:", response.status); // Debug-Log
