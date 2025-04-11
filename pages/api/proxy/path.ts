@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // 1. Webflow-Ziel-URL & Passwort (aus Umgebungsvariablen)
-  const WEBFLOW_URL = 'https://snt-starter.design.webflow.io';
+  const WEBFLOW_URL = 'https://snt-starter.webflow.io';
   const WEBFLOW_PASSWORD = process.env.WEBFLOW_PASSWORD; // Aus Vercel-Env
 
   // 2. Pfad aus der Anfrage extrahieren (z. B. `/api/proxy/products` → `products`)
@@ -30,7 +30,7 @@ const path = pathSegments.join('/');
     res.status(response.status).send(html);
 
   } catch (error: unknown) {
-    // Lösung 1 + 3: Typisierung + Logging
+    // Typisierung + Logging
     console.error("Proxy-Fehler:", error);
     const message = error instanceof Error ? error.message : String(error);
     res.status(500).json({ error: "Proxy-Fehler: " + message });
