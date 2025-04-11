@@ -2,22 +2,12 @@
   "rewrites": [
     {
       "source": "/:path*",
-      "destination": "https://snt-starter.webflow.io/"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/:path*",
-      "headers": [
-        {
-          "key": "Host",
-          "value": "snt-starter.webflow.io"
-        },
-        {
-          "key": "Authorization",
-          "value": "Basic $(echo -n ':Nuhadt123' | base64)"
-        }
-      ]
+      "destination": "https://snt-starter.webflow.io/:path*",
+      "headers": {
+        "Host": "snt-starter.webflow.io",
+        "Authorization": "Basic $(echo -n ':Nuhadt123' | base64)",
+        "Cache-Control": "no-cache"
+      }
     }
   ]
 }
