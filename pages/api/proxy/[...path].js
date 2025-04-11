@@ -1,5 +1,5 @@
 // pages/api/proxy/[...path].js
-import { NextApiRequest, NextApiResponse } from 'next';
+/*import { NextApiRequest, NextApiResponse } from 'next';
 import fetch from 'node-fetch';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -52,4 +52,37 @@ const path = pathSegments.join('/');
   Host: "snt-starter.webflow.io" 
 });
 
+}*/
+// pages/[...path].js
+
+export default function Page({ htmlContent }) {
+  return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+}
+
+export async function getServerSideProps(context) {
+  const { path } = context.params;
+  const WEBFLOW_URL = 'https://snt-starter.webflow.io';
+  const WEBFLOW_PASSWORD = process.env.WEBFLOW_PASSWORD;
+
+  // Pfad zusammenbauen (z.B. ["about"] → "about")
+  const webflowPath = Array.isArray(path) ? path.join('/') : path || '';
+
+  try {
+    const response = await fetch(`${WEBFLOW_URL}/${webflowPath}`, {
+      headers: {
+        Authorization: `Basic ${Buffer.from(`:${WEBFLOW_PASSWORD}`).toString('base64')}`,
+        Host: 'snt-starter.webflow.io',
+      },
+    });
+
+    if (!response.ok) return { notFound: true };
+
+    let htmlContent = await response.text();
+    htmlContent = htmlContent.replace(/snt-starter\.webflow\.io/g, 'snttrades.de');
+    return { props: { htmlContent } };
+
+  } catch (error) {
+    console.error('Proxy-Fehler:', error);
+    return { notFound: true };
+  }
 }
