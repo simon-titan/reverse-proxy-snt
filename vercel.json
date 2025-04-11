@@ -1,7 +1,22 @@
 {
-  "build": {
-    "env": {
-      "WEBFLOW_PASSWORD": "@webflow-password"
-    }
+    "rewrites": [
+     
+      {
+        "source": "/api/:path*",
+        "destination": "/api/:path*"
+      },
+      {
+        "source": "/dashboard",
+        "destination": "https://deine-webflow-domain.com/dashboard"
+      },
+      {
+        "source": "/profile",
+        "destination": "https://deine-webflow-domain.com/profile"
+      },
+      {
+        "source": "/:path*",
+        "destination": ""
+      }
+    ]
   }
-}
+  
