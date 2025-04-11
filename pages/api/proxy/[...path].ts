@@ -13,12 +13,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   : [req.query.path || '']; // Fallback für string/undefined
 const path = pathSegments.join('/');
 
+
   try {
     // 3. Anfrage an Webflow mit Passwort-Header
     const response = await fetch(`${WEBFLOW_URL}/${path}`, {
       headers: {
         Authorization: `Basic ${Buffer.from(`:${WEBFLOW_PASSWORD}`).toString('base64')}`,
-        Host: "snt-starter.design.webflow.io", // Wichtig für CORS
+        Host: "snt-starter.webflow.io", // Wichtig für CORS
       },
     });
 
@@ -35,4 +36,11 @@ const path = pathSegments.join('/');
     const message = error instanceof Error ? error.message : String(error);
     res.status(500).json({ error: "Proxy-Fehler: " + message });
   }
+
+  console.log("Proxy target:", `${WEBFLOW_URL}/${path}`);
+  console.log("Headers:", { 
+  Authorization: "...", 
+  Host: "snt-starter.webflow.io" 
+});
+
 }

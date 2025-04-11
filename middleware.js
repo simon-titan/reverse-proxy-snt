@@ -7,9 +7,12 @@ export async function middleware(req) {
   const publicRoutes = ["/", "/products"];
   if (publicRoutes.includes(pathname)) {
     // Rewrite durch PROXY (nicht direkt zu Webflow!)
+    const proxyPath = pathname === '/' ? '' : pathname;
     return NextResponse.rewrite(new URL(`/api/proxy${pathname}`, req.url));
   }
 
+  console.log("Middleware rewrite:", `/api/proxy${pathname}`);
+  
   // 2. Geschützte Routen (später mit Outseta)
   const protectedRoutes = ["/platform", "/profile"];
   if (protectedRoutes.includes(pathname)) {
