@@ -25,3 +25,6 @@ export async function middleware(req) {
   return NextResponse.next();
 }
 
+export const config = {
+  matcher: ['/', '/products', '/dashboard', '/profile'],
+};
