@@ -1,8 +1,16 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [{ "src": "package.json", "use": "@vercel/next" }],
+  "routes": [
     {
-      "source": "/:path*",
-      "destination": "https://snt-starter.webflow.io/:path*"
+      "src": "/(.*)",
+      "dest": "https://snt-starter.webflow.io/$1",
+      "headers": {
+        "Host": "snt-starter.webflow.io",
+        "Authorization": "Basic bnVoYWR0MTIzOg==",
+        "Accept": "text/html",
+        "Cache-Control": "no-cache"
+      }
     }
   ]
 }

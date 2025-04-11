@@ -1,1 +1,1 @@
-export { default } from './[...path]'
+export default function Home() { return null }
