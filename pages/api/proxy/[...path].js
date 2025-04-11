@@ -64,7 +64,7 @@ export async function getServerSideProps(context) {
   const WEBFLOW_URL = 'https://snt-starter.webflow.io';
   const WEBFLOW_PASSWORD = process.env.WEBFLOW_PASSWORD;
 
-  // Pfad zusammenbauen (z.B. ["about"] → "about")
+  // Pfad zusammenbauen (z.B. ["about"] → "about"
   const webflowPath = Array.isArray(path) ? path.join('/') : path || '';
 
   try {
