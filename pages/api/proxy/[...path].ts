@@ -24,7 +24,7 @@ const path = pathSegments.join('/');
       },
       
     });
-
+    console.log(response);
     console.log("Webflow response status:", response.status); // Debug-Log
 
 
